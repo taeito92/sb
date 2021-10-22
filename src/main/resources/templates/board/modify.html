@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layout/layout2">
+
+
+<div layout:fragment="content">
+
+    <div class="card-header">
+        Board Modify
+    </div>
+
+    <div class="card-body">
+        <form th:action="@{/board/modify}" method="post" class="actionForm">
+            <div class="input-group mb-3">
+                <span class="input-group-text">Title</span>
+                <input type="hidden" name="bno" th:value="${dto.bno}">
+                <input type="text" name="title" class="form-control" placeholder="Title" th:value="${dto.title}">
+            </div>
+
+            <div class="input-group mb-3">
+                <span class="input-group-text">Writer</span>
+                <input type="text" name="writer" class="form-control" placeholder="Writer"
+                       th:value="${dto.writer}" readonly>
+            </div>
+
+            <div class="input-group">
+                <span class="input-group-text">Content</span>
+                <textarea class="form-control" aria-label="With textarea" name="content"
+                          rows="4">[[${dto.content}]]</textarea>
+            </div>
+            <div class="my-4">
+                <div class="float-start">
+                    <button type="button" class="btn btn-primary" th:onclick="|moveList()|">List</button>
+                </div>
+                <div class="float-end">
+                    <button type="submit" class="btn btn-warning">Modify</button>
+                    <button type="button" class="btn btn-danger" th:onclick="|deleteBoard(${dto.bno})|">Delete</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+</div>
+
+<th:block layout:fragment="script">
+
+    <script th:inline="javascript">
+
+        const form = document.querySelector(".actionForm")
+
+        function moveList() {
+
+            const page = [[${pageRequestDTO.page}]]
+            const size = [[${pageRequestDTO.size}]]
+            const type = [[${pageRequestDTO.type}]]
+            const keyword = [[${pageRequestDTO.keyword}]]
+
+            let searchQuery = ''
+
+            if (type && keyword) {
+                searchQuery += `&type=${type}&keyword=${keyword}`
+            }
+
+            self.location = `/board/list?page=${page}&size=${size}` + searchQuery
+        }
+
+        function deleteBoard(bno) {
+
+            const event = window.event
+            event.stopPropagation()
+            event.preventDefault()
+
+            form.setAttribute("action", "/board/remove")
+            form.setAttribute("method", "post")
+            form.submit()
+
+            console.log(form)
+
+            //self.location = `/board/remove?bno=${bno}`
+        }
+
+
+    </script>
+</th:block>
+
