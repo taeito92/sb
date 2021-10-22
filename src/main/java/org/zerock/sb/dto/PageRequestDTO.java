@@ -18,7 +18,6 @@ public class PageRequestDTO {
     private int size = 10;
 
     private String type;
-
     private String keyword;
 
     public int getSkip() {

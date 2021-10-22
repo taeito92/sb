@@ -8,10 +8,11 @@ import org.zerock.sb.entity.Board;
 import org.zerock.sb.repository.search.BoardSearch;
 
 public interface BoardRepository extends JpaRepository<Board, Long>, BoardSearch {
+
     //board가 기준이므로 group by b,,
     //Pageable타입을 파라미터로 받으면 Page타입으로 받음
     //select할때 하나 이상이면 object[]로 받음
-    @Query("select b.bno, b.title, b.writer, b.regDate,  count(r) from Board b left join Reply r on r.board = b group by b ")
+    @Query("select b, count(r) from Board b left join Reply r on r.board = b group by b")
     Page<Object[]> ex1(Pageable pageable);
 
 }

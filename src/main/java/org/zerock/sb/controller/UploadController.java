@@ -30,7 +30,7 @@ import java.util.UUID;
 @Log4j2
 public class UploadController {
 
-    @Value("${org.zerock.upload.path}")
+    @Value("${org.zerock.upload.path}") //properties에서 설정한 경로
     private String uploadPath;
 
     @PostMapping("/uploadAjax")

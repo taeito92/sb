@@ -10,7 +10,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import java.time.LocalDateTime;
 
-@Entity//(꼭 변수에 ID값을 정해줘야 함)
+@Entity
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -18,21 +18,24 @@ import java.time.LocalDateTime;
 @ToString
 public class Board {
 
-    @Id//Entity는 꼭 식별값이 필요함.(프라이머리키)
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long bno;
 
     private String title;
-    private String  content;
+
+    private String content;
+
     private String writer;
 
-    @CreationTimestamp //등록시간 자동관리(하이버네이트)
+    @CreationTimestamp
     private LocalDateTime regDate;
 
-    @UpdateTimestamp//수정시간 자동관리
+    @UpdateTimestamp
     private LocalDateTime modDate;
 
-    public void change(String title, String content){//DTO로 변경할 메서드
+    //entity는 setter가 없으므로 변경되는 부분인 title과 content만 따로 change로 메서드 작성
+    public void change(String title, String content) {
         this.title = title;
         this.content = content;
     }

@@ -1,20 +1,17 @@
 package org.zerock.sb.entity;
 
 import lombok.*;
-import net.bytebuddy.dynamic.loading.InjectionClassLoader;
 import org.hibernate.annotations.*;
 
 import javax.persistence.*;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import java.time.LocalDateTime;
-import java.util.Collection;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
-@Entity//(꼭 변수에 ID값을 정해줘야 함)
-@Table(name = "tbl_diary")
+@Entity
+@Table(name = "tbl_diary") //table 이름 직접 설정
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -27,23 +24,30 @@ public class Diary {
     private Long dno;
 
     private String title;
-    private String  content;
+
+    private String content;
+
     private String writer;
 
-    @CreationTimestamp //등록시간 자동관리(하이버네이트)
+    @CreationTimestamp
     private LocalDateTime regDate;
 
-    @UpdateTimestamp//수정시간 자동관
+    @UpdateTimestamp
     private LocalDateTime modDate;
 
-    // 실행하면 태그 테이블도 만들어지고 외래키도 자동으로 걸림, 게시글을 수정하면 태그들도 같이 지워졌다가 다시 들어간다.
-    // 그래서 엔티티가 아니라 다이어리에 강력하게 묶여있는..
-    @ElementCollection(fetch = FetchType.LAZY)
-    @CollectionTable(name = "tbl_diary_tag")
-    @Fetch(value = FetchMode.JOIN)
+    @ElementCollection(fetch = FetchType.LAZY) //종속적인 관계에는 ElementCollection을 줌 -> FK 자동 설정
+    @CollectionTable(name = "tbl_diary_tags")
+    //Join Fetch라고 함 -> N+1 문제 해결 방안
+    @Fetch(value = FetchMode.JOIN) // -> 지연로딩임에도 Join으로 가져옴, OneToMany에도 사용가능
     @BatchSize(size = 50)
     @Builder.Default
-    private Collection<String> tags = new HashSet<>();
+    private Set<String> tags = new HashSet<>();
+
+    @ElementCollection(fetch = FetchType.LAZY) //값개체
+    @CollectionTable(name = "tbl_diary_picture")
+    @Fetch(value = FetchMode.JOIN)
+    @BatchSize(size = 50)
+    private Set<DiaryPicture> pictures;
 
     public void setTitle(String title) {
         this.title = title;
@@ -53,17 +57,11 @@ public class Diary {
         this.content = content;
     }
 
-    public void setTags(Collection<String> tags) {
+    public void setTags(Set<String> tags) {
         this.tags = tags;
     }
 
     public void setPictures(Set<DiaryPicture> pictures) {
         this.pictures = pictures;
     }
-
-    @ElementCollection(fetch = FetchType.LAZY)
-    @CollectionTable(name = "tbl_diary_picture")
-    @Fetch(value = FetchMode.JOIN)
-    @BatchSize(size = 50)
-    private Set<DiaryPicture> pictures;
 }

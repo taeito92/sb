@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class RootConfig {
 
+    //DTO-Entity 변환
     @Bean
     public ModelMapper modelMapper() {
         ModelMapper modelMapper = new ModelMapper();
@@ -18,4 +19,5 @@ public class RootConfig {
 
         return modelMapper;
     }
+
 }

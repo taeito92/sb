@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.zerock.sb.dto.BoardDTO;
+import org.zerock.sb.dto.PageRequestDTO;
 
 import java.util.stream.IntStream;
 
@@ -14,6 +15,16 @@ public class BoardServiceTests {
 
     @Autowired
     private BoardService boardService;
+
+    @Test
+    public void ListTest() {
+
+        PageRequestDTO pageRequestDTO = PageRequestDTO.builder()
+                .build();
+
+
+        boardService.getListWithReplyCount(pageRequestDTO);
+    }
 
     @Test
     public void registerTest() {

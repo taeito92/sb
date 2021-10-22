@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.zerock.sb.dto.PageRequestDTO;
+import org.zerock.sb.entity.Reply;
 
 @SpringBootTest
 @Log4j2
@@ -15,17 +16,16 @@ public class ReplyServiceTests {
 
     @Test
     public void getListOfBoardTest() {
-        Long bno = 199L;
+        Long bno = 198L;
 
-        PageRequestDTO pageRequestDTO = PageRequestDTO.builder()
-                .page(-1)
-                .build();
-
+        PageRequestDTO pageRequestDTO = PageRequestDTO.builder().page(-1).build();
 
         log.info(replyService.getListOfBoard(bno, pageRequestDTO));
     }
 
+    @Test
+    public void registerTest() {
 
-
+    }
 
 }

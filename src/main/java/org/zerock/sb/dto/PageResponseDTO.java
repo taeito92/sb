@@ -17,7 +17,8 @@ public class PageResponseDTO<E> {
 
     //시작 페이지 번호
     private int start;
-    // 끝 페이지 번호
+
+    //끝 페이지 번호
     private int end;
 
     //이전 페이지 여부
@@ -27,7 +28,6 @@ public class PageResponseDTO<E> {
 
     //결과 데이터
     private List<E> dtoList;
-
 
     public PageResponseDTO(PageRequestDTO pageRequestDTO, int count){
         this.page = pageRequestDTO.getPage();

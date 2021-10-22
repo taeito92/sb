@@ -9,7 +9,7 @@ import javax.persistence.Id;
 import java.util.HashSet;
 import java.util.Set;
 
-@Entity//(꼭 변수에 ID값을 정해줘야 함)
+@Entity
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -18,12 +18,19 @@ import java.util.Set;
 public class Member {
 
     @Id
-    private String id;
+    private String mid; //email일 수도 있다고 인지
 
     private String mpw;
 
     private String mname;
 
-   @ElementCollection(fetch = FetchType.LAZY)
-   private Set<MemberRole> roleSet = new HashSet<>();
+    @ElementCollection(fetch = FetchType.LAZY) //ElementCollection은 보통 Set으로 설계
+    @Builder.Default
+    private Set<MemberRole> roleSet = new HashSet<>();
+
+    public void changePassword(String password){
+        this.mpw = password;
+    }
+
 }
+

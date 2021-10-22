@@ -7,21 +7,27 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Set;
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
+@Data
 public class DiaryDTO {
 
     private Long dno;
+
     private String title;
+
     private String content;
+
     private String writer;
+
     private LocalDateTime regDate;
     private LocalDateTime modDate;
 
     private List<String> tags;
     private List<DiaryPictureDTO> pictures;
+
+
+
 }

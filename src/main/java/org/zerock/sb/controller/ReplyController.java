@@ -24,37 +24,30 @@ public class ReplyController {
     }
 
     @PostMapping("")
-    //제이슨 데이ㅓ를 받기위해 requestbody
-    public PageResponseDTO<ReplyDTO> register(@RequestBody ReplyDTO replyDTO){
+    public PageResponseDTO<ReplyDTO> register(@RequestBody ReplyDTO replyDTO) {
+
         replyService.register(replyDTO);
+        PageRequestDTO pageRequestDTO = PageRequestDTO.builder().page(-1).build(); //page가 -1이 되면 마지막 페이지로 이동함
 
-        PageRequestDTO pageRequestDTO = PageRequestDTO.builder().page(-1).build();
-
-        return replyService.getListOfBoard(replyDTO.getBno(), pageRequestDTO);
+        return  replyService.getListOfBoard(replyDTO.getBno(), pageRequestDTO);
     }
 
     @DeleteMapping("/{bno}/{rno}")
     public PageResponseDTO<ReplyDTO> remove(
-            @PathVariable("bno")Long bno,
-            @PathVariable("rno")Long rno, PageRequestDTO requestDTO){
+            @PathVariable("bno") Long bno,
+            @PathVariable("rno") Long rno,
+            PageRequestDTO pageRequestDTO) {
 
-        return replyService.remove(bno, rno, requestDTO);
+        return replyService.removeReply(bno, rno, pageRequestDTO);
     }
 
     @PutMapping("/{bno}/{rno}")
     public PageResponseDTO<ReplyDTO> modify(
-            @RequestBody ReplyDTO replyDTO,
-            @PathVariable("bno")Long bno,
-            @PathVariable("rno")Long rno, PageRequestDTO requestDTO){
+            @PathVariable("bno") Long bno,
+            @PathVariable("rno") Long rno,
+            @RequestBody ReplyDTO replyDTO, //obj를 json으로 자동변환
+            PageRequestDTO pageRequestDTO) {
 
-        log.info("bno: " + bno);
-
-        log.info("rno: " + rno);
-
-        log.info("replyDTO: " + replyDTO);
-
-        return replyService.modify(replyDTO, requestDTO);
+        return replyService.modifyReply(replyDTO, pageRequestDTO);
     }
-
-
 }

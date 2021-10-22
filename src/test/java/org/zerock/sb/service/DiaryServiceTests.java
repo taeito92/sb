@@ -1,19 +1,13 @@
 package org.zerock.sb.service;
 
-
 import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
-import org.zerock.sb.dto.DiaryDTO;
-import org.zerock.sb.dto.DiaryPictureDTO;
-import org.zerock.sb.dto.PageRequestDTO;
-import org.zerock.sb.dto.PageResponseDTO;
-import org.zerock.sb.entity.DiaryPicture;
+import org.zerock.sb.dto.*;
 
 import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -26,64 +20,61 @@ public class DiaryServiceTests {
     DiaryService diaryService;
 
     @Test
-    public void testRegister() {
+    public void registerTest() {
 
-        List<String> tags = IntStream.rangeClosed(1,3).mapToObj(j -> "tag_"+j).collect(Collectors.toList());
+        List<String> tags = IntStream.rangeClosed(1, 3).mapToObj(j -> "tag_" + j)
+                .collect(Collectors.toList());
 
-        List<DiaryPictureDTO> pictures = IntStream.rangeClosed(1,3).mapToObj(j -> {
-            DiaryPictureDTO picture = DiaryPictureDTO.builder()
-                    .uuid(UUID.randomUUID().toString())
-                    .savePath("2021/10/18")
-                    .fileName("img"+j+".jpg")
-                    .idx(j)
-                    .build();
-            return picture;
-        }).collect(Collectors.toList());
+        List<DiaryPictureDTO> pictures = IntStream.rangeClosed(1, 3).mapToObj(j -> {
+                    DiaryPictureDTO picture = DiaryPictureDTO.builder()
+                            .uuid(UUID.randomUUID().toString())
+                            .fileName("img" + j + ".jpg")
+                            .savePath("2021/10/18")
+                            .idx(j)
+                            .build();
 
-        DiaryDTO dto = DiaryDTO.builder()
-                .title("title...")
-                .content("content..")
-                .writer("writer...")
+                    return picture;
+                }).collect(Collectors.toList());
+
+        DiaryDTO diaryDTO = DiaryDTO.builder()
+                .title("title....")
+                .content("content...")
+                .writer("user")
                 .tags(tags)
                 .pictures(pictures)
                 .build();
 
-        diaryService.register(dto);
+        diaryService.register(diaryDTO);
 
     }
 
-    @Transactional(readOnly = true)
-
+    @Transactional(readOnly = true) //Entity와 DTO 객체간의 괴리 때문에 delete, insert가 반복할 때 사용
     @Test
-    public void tetRead() {
+    public void readTest() {
 
-        Long dno = 101L;
+        Long dno = 1L;
 
-        DiaryDTO dto = diaryService.read(dno);
+        DiaryDTO diaryDTO = diaryService.read(dno);
 
-        log.info(dto);
-
-        log.info(dto.getPictures().size());
-
-        dto.getPictures().forEach(diaryPictureDTO -> log.info(diaryPictureDTO));
+        log.info(diaryDTO);
     }
 
     @Test
-    public void testList(){
+    public void listTest() {
         PageRequestDTO pageRequestDTO = PageRequestDTO.builder().build();
 
-        PageResponseDTO<DiaryDTO> responseDTO = diaryService.getList(pageRequestDTO);
+        log.info(diaryService.getList(pageRequestDTO));
 
-        log.info(responseDTO);
-
-        responseDTO.getDtoList().forEach(diaryDTO -> {
-            log.info(diaryDTO);
-            log.info(diaryDTO.getTags());
-            log.info(diaryDTO.getPictures());
-            log.info("----------------------------");
-        });
     }
 
+    @Test
+    public void listWithFavoriteTest() {
+        PageRequestDTO pageRequestDTO = PageRequestDTO.builder().build();
 
+        PageResponseDTO<DiaryListDTO> responseDTO = diaryService.getListWithFavorite(pageRequestDTO);
+
+        //log.info(responseDTO);
+
+    }
 
 }

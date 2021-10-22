@@ -10,5 +10,4 @@ public interface BoardSearch {
 
     Page<Object[]> searchWithReplyCount(char[] typeArr, String keyword, Pageable pageable);
 
-
 }

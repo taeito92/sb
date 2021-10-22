@@ -77,9 +77,7 @@ public class BoardRepositoryTests {
         result.get().forEach(arr -> {
             log.info(Arrays.toString(arr));
         });
-
     }
-
 
 
 }

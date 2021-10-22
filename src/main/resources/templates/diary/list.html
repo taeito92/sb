@@ -20,46 +20,46 @@
             <button id="searchBtn" class="btn btn-info" onclick="search()">Search</button>
         </div>
 
-        <style>
-            .tagDiv {
-                list-style: none;
-                display: flex;
-                flex-direction: row;
-            }
-            .tagDiv {
-                margin: 0.3em;
-                background-color: blue;
-                border-radius: 0.5em;
-                color: white;
-
-            }
-        </style>
-
         <table class="table">
             <thead>
             <tr>
-                <th scope="col">dno</th>
+                <th scope="col">Dno</th>
                 <th scope="col">Title</th>
                 <th scope="col">Writer</th>
                 <th scope="col">RegDate</th>
             </tr>
             </thead>
             <tbody>
-            <tr th:each="board:${res.dtoList}">
-                <th scope="row">[[${board.dno}]]</th>
-                <td><a th:href="|javascript:movePage(${res.page}, ${board.dno} )|">[[${board.title}]]</a>
+
+            <style>
+                .tagDiv {
+                    list-style: none;
+                    display: flex;
+                    flex-direction: row;
+                }
+                .tagDiv li {
+                    margin: 0.3em;
+                    background-color: #2c3034;
+                    border-radius: 0.5em;
+                    color: white;
+                }
+            </style>
+
+
+
+            <tr th:each="diary:${responseDTO.dtoList}">
+                <th scope="row">[[${diary.dno}]]</th>
+                <td><a th:href="|javascript:movePage(${responseDTO.page}, ${diary.dno} )|">[[${diary.title}]]</a>
+                    <h4>Favorite Score : [[${diary.totalScore}]]</h4>
                     <div class="pictureDiv">
-                        <img th:each="picture:${board.pictures}" th:src="@{/display(fileName=${picture.getLink()})}">
+                        <img th:each="picture:${diary.pictures}" th:src="@{/display(fileName=${picture.getLink()})}">
                     </div>
                     <ul class="tagDiv">
-                        <li th:each="tag:${board.tags}">[[|#${tag}|]]</li>
-
+                        <li th:each="tag:${diary.tags}">[[|#${tag}|]]</li>
                     </ul>
-
-
                 </td>
-                <td>[[${board.writer}]]</td>
-                <td>[[${#temporals.format(board.regDate, 'yyyy/MM/dd')}]]</td>
+                <td>[[${diary.writer}]]</td>
+                <td>[[${#temporals.format(diary.regDate, 'yyyy/MM/dd')}]]</td>
             </tr>
             </tbody>
         </table>
@@ -67,19 +67,19 @@
 
     <div class="d-flex justify-content-center">
         <ul class="pagination">
-            <li th:if="${res.prev}" class="page-item">
-                <a class="page-link" th:href="|javascript:movePage(${res.start-1})|" aria-label="Previous">
+            <li th:if="${responseDTO.prev}" class="page-item">
+                <a class="page-link" th:href="|javascript:movePage(${responseDTO.start-1})|" aria-label="Previous">
                     <span aria-hidden="true">&laquo;</span>
                     <span class="sr-only">Previous</span>
                 </a>
             </li>
 
-            <li th:each="num: ${#numbers.sequence( res.start , res.end)}" th:class="|page-item ${res.page == num?'active':''}|">
+            <li th:each="num: ${#numbers.sequence(responseDTO.start , responseDTO.end)}" th:class="|page-item ${responseDTO.page == num?'active':''}|">
                 <a class="page-link" th:href="|javascript:movePage(${num})|">[[${num}]]</a>
             </li>
 
-            <li th:if="${res.next}" class="page-item">
-                <a class="page-link" th:href="|javascript:movePage(${res.end+1})|" aria-label="Next">
+            <li th:if="${responseDTO.next}" class="page-item">
+                <a class="page-link" th:href="|javascript:movePage(${responseDTO.end+1})|" aria-label="Next">
                     <span aria-hidden="true">&raquo;</span>
                     <span class="sr-only">Next</span>
                 </a>
@@ -126,7 +126,7 @@
 
         function movePage(page, dno) {
 
-            console.log(pageRequest)
+            //console.log(pageRequest)
 
             let uri ="";
 
@@ -139,9 +139,9 @@
             }
 
             if(dno) {
-                uri = `/board/read?dno=${dno}&page=${page}` + searchQuery
+                uri = `/diary/read?dno=${dno}&page=${page}` + searchQuery
             }else {
-                uri = `/board/list?page=${page}` + searchQuery
+                uri = `/diary/list?page=${page}` + searchQuery
             }
             self.location = uri
         }
@@ -155,12 +155,8 @@
 
             console.log("type", type, "keyword", keyword)
 
-            self.location =`/board/list?page=1&type=${type}&keyword=${keyword}`
+            self.location =`/diary/list?page=1&type=${type}&keyword=${keyword}`
         }
 
     </script>
 </th:block>
-
-
-
-

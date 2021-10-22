@@ -1,35 +1,33 @@
 package org.zerock.sb.entity;
 
-
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
-@Entity//(꼭 변수에 ID값을 정해줘야 함)
+@Entity
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-@ToString
+@ToString(exclude = {"diary", "member"})
 public class Favorite {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public Long fno;
+    private Long fno;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Diary diary;
 
-    @ManyToOne
-    private Member member;
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Member member; //JDBC와의 차이점, JDBC는 타입만 주면되지만(ex.mid) JPA는 전체 클래스를 주어야 함
 
     private int score;
 
     @CreationTimestamp
     private LocalDateTime regDate;
-
 
 
 }

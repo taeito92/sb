@@ -91,6 +91,7 @@ public class BoardServiceImpl implements BoardService {
     public void remove(Long bno) {
 
         boardRepository.deleteById(bno);
+
     }
 
     @Override

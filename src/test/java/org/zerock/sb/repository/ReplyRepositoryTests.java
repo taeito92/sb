@@ -11,8 +11,6 @@ import org.zerock.sb.entity.Reply;
 import java.util.List;
 import java.util.stream.IntStream;
 
-
-
 @SpringBootTest
 @Log4j2
 public class ReplyRepositoryTests {
@@ -75,36 +73,50 @@ public class ReplyRepositoryTests {
         log.info(result.getTotalElements());
 
         result.get().forEach(reply -> log.info(reply));
-
     }
 
     @Test
-    public void testCountOfBoard() {
+    public void testReplyCountOfBoard() {
 
-        Long bno = 195L;
+        long bno = 195L;
+        int size = 10;
 
-        //120
         int count = replyRepository.getReplyCountOfBoard(bno);
+        int lastPage = (int)(Math.ceil(count / (double)size));
 
-
-        int lastPage = (int)(Math.ceil(count/10.0));
-
-        if(lastPage == 0){
+        /*
+        //삼항연산자 대신 쓰는 if문
+        if(lastPage == 0) {
             lastPage = 1;
         }
+        */
 
+        /*
+        //진짜 끝 페이지를 찾는 코드
+        int lastEnd = lastPage * size;
+        int lastStart = lastEnd - size;
 
-        // 0부터 시작하는 페이지 번호, 사이즈, 소트
-        Pageable pageable = PageRequest.of(lastPage-1, 10);
+        log.info(lastStart + " : " + lastEnd);
+        */
+
+        //댓글 없는 경우 대비 삼항조건문
+        Pageable pageable = PageRequest.of(lastPage <= 0 ? 0 : lastPage -1, size);
 
         Page<Reply> result = replyRepository.getListByBno(bno, pageable);
 
         log.info("total: " + result.getTotalElements());
-        log.info("..." + result.getTotalPages());
+        log.info("......." + result.getTotalPages());
 
-        result.get().forEach(reply -> {
-            log.info(reply);
-        });
+        result.get().forEach(reply -> log.info(reply));
+
+    }
+
+    @Test
+    public void testdeleteALLReplyByBno() {
+
+        Long bno = 200L;
+
+        replyRepository.deleteALLReplyByBno(bno);
     }
 
 }
